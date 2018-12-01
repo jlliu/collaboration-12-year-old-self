@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>collaboration with my 12-year-old self</title>
+    <script src="libraries/ml5.min.js"></script>
+     <script src="libraries/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.dom.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+   
+    <script src="sketch.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/typeit@5.10.7/dist/typeit.min.js"></script> -->
+
+  </head>
+  <body>
+    <div class="bg">
+
+       <img id="desktop-bar" src="img/desktop-bar.png">
+
+       <img  id="paint-icon" src="img/paint-icon.png">
+        <img  id="notepad-icon" src="img/notepad-icon.png">
+         <img  id="folder-icon" src="img/folder-icon.png">
+
+    </div>
+
+           <div id="fake-start-button"></div>
+       <img id="start-menu" src="img/start-menu.png">
+       <img id="log-off" src="img/log-off.png">
+
+           <div id="paint-UI"><img id="paint-ui-img" class="draw" src="img/paint-ui-draw.png">
+            <img id="paint-ui-img" class="erase" src="img/paint-ui-erase.png">
+        <button id="erase" class="paint-button erase" onclick="erase()"></button>
+       <button id="pen" class="paint-button draw"  onclick="pen()"></button>
+
+       </div>
+    <img id="resultImage" src=""><!-- <p>Raw drawing</p> -->
+
+
+  <img id="photos-ui" src="img/photos-ui.png">
+
+
+    <div id="cmd-container">
+      <img id="cmd-window" src="img/cmd-window.png">
+        <div class="imageContainer">
+
+        
+        <img id="styledImage" src=""  ><!-- <p>Styled Drawing</p> -->
+        <img id="fadingImage" src=""  ><!-- <p>Styled Drawing</p> -->
+       </div>
+    </div>
+
+
+    <div id="image-preview-container">
+        <img src="img/image-preview-ui.png">
+        <img id="styleImg" src="img/originals/sakura2.jpg">
+      </div>
+
+
+       <div id="notepad-container">
+        <img src="img/notepad-ui.png">
+        <!-- <p id="textarea"></p> -->
+        <!-- <textarea id="textarea" rows="4" cols="50"></textarea> -->
+        <div contenteditable="true" id="textarea"></div>
+        
+      </div>
+    <!-- <img id="testImage" src="test.jpg"> -->
+   <!--  <button id="styleTransfer" onclick="transferImages()">transfer style</button> -->
+   <!--   <button id="erase" onclick="erase()">ERASE</button>
+     <button id="pen" onclick="pen()">DRAW</button> -->
+
+     <div id="intro"></div>
+     <div id="outro">
+      <p>
+       "A collaboration with my 12 year old self"
+       <br>
+       <br>jackie liu
+       <br>
+       <br>
+       music by ryoga: https://soundcloud.com/ryogaa/lovely
+     </p>
+     </div>
+  </body>
+
+
+</html>
