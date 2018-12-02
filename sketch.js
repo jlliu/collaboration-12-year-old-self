@@ -40,11 +40,13 @@ let resizedContext;
 let resizedCanvas;
 
 
+var styleTransferMode = false;
+
 
 
 
 function preload() {
- 	 soundFormats('mp3');
+ 	soundFormats('mp3');
 	vista_sound = loadSound('sound/vista-sound.mp3');
 	mousedown_1 = loadSound('sound/mousedown-1.mp3');
 	mousedown_2 = loadSound('sound/mousedown-2.mp3');
@@ -126,7 +128,8 @@ function modelLoaded() {
 let updateHighDef;
 let updateIndex;
 setInterval(function() {
-		if (allStylesReady){
+		if (allStylesReady && styleTransferMode){
+
 
 
 			var currentCanvasState = JSON.stringify(canvas.toDataURL());
@@ -134,11 +137,12 @@ setInterval(function() {
 
 
 			if (currentCanvasState !== prevCanvasState){
-				console.log("CANVAS HAS CHANGED");
+				$("#textarea").addClass("activated");
+				$("#textarea").html("Transferring the style now...");
+
 				//We notice that the canvas has changed since the last interval
 				prevCanvasState = currentCanvasState;
-				if ($("#paint-UI").hasClass("visible") && $("#image-preview-container").hasClass("visible") && !$("#textarea").is(":focus") && !$("#start-menu").hasClass("visible")){
-			 		console.log("drawing state is on");
+
 			 		//Check that textbox isnt active AND paint is open
 					currentStyle = styles[currentStyleIndex];
 			 		//If we are currently drawing, use a lower resolution
@@ -164,22 +168,14 @@ setInterval(function() {
 						updateIndex =0;
 
 					}
-					// resultImage.src = image;
-					// transferImages(currentStyle); 
-				}
 
 			} else {
 
 				if (updateHighDef ==true){
 					var dimensions = ['90','110','120','130','150'];
-				    console.log("CANVAS HAS NOT CHANGED");
 					currentStyle = styles[currentStyleIndex];
 	
-						
-							
-						
 			
-					console.log("ITERATING THROUGH DIMENSION");
 					var thisDimension = dimensions[updateIndex];
 					var dimensionInt = parseInt(thisDimension);
 					resizedCanvas.height = thisDimension;
@@ -191,8 +187,10 @@ setInterval(function() {
 
 					if (updateIndex == (dimensions.length-1)){
 						updateHighDef = false;
+						$("#textarea").html("Go ahead and draw! :)");
 					}else{
 						updateIndex++;
+
 					}
 					 
 
@@ -205,6 +203,8 @@ setInterval(function() {
 
 		}
 
+			
+
 		}
 		
 
@@ -212,13 +212,11 @@ setInterval(function() {
 
 setInterval(function() {
 	//The thing switches to a new style. But we display then fade out the previous style
-	 if ($("#paint-UI").hasClass("visible") && $("#image-preview-container").hasClass("visible") && !$("#textarea").is(":focus") && !$("#start-menu").hasClass("visible")){
+	 if (styleTransferMode){
 					var image = resizedCanvas.toDataURL();
 		// var image = canvas.toDataURL();
 		resultImage.src = image;
 		transferImages(currentStyle); 
-		
-	 	// console.log("PAINT UI VISIBLE AND TEXTAREA IS NOT FOCUSED");
 		$(fadingImage).show();
 		currentStyleIndex = (currentStyleIndex+1) % stylePaths.length;
 		var currentStyleImgPath = pathsToOriginal[stylePaths[currentStyleIndex]];
@@ -233,7 +231,7 @@ setInterval(function() {
 function transferImages(style) {
 	style.transfer(document.getElementById("resultImage"), function(err, result) {
     	styledImage.src = result.src;
-    	// console.log("STYLE HAS TRANSFERED");
+    	$("#styledImage").show();
   });
 }
 
@@ -282,12 +280,9 @@ $(document).ready(function(){
 
 
 	$("#folder-icon").dblclick(function(){
-		// $("#paint-UI").show();
-		// $("#paint-UI").addClass("visible");
-		console.log("FOLDER CLICKED");
+
 		$("#photos-ui").show();
 
-		// $("#image-preview-container").show();
 	});
 
 
@@ -299,33 +294,32 @@ $(document).ready(function(){
 
 
 
-	// $("#notepad-icon").dblclick(function(){
-	// 	console.log("notepad clicked");
-	// 	$("#notepad-container").show();
-	// 	// 	new TypeIt('#textarea', {
-	// 	// 	  strings: ['Dear my 12 year old self,\n',
-	// 	// 	  'I’m very proud of you. You have done a lot even though it might not feel like it right now.',
-	// 	// 	  'Some day you’ll feel like you have to be better. But not in a self improvement way, but better in the ways that people expect you to.',
-	// 	// 	  'Don’t let you or anyone else tell you that you’re wasting your time by doing things that make you happy.',
-	// 	// 	  'You don’t need to suffer and criticize yourself in order to feel like you’re worthy.',
-	// 	// 	  'Draw what you like. Do what makes you feel like yourself. It’s hard to know, but trust your instinct.',
-	// 	// 	  'You are doing fine just the way you are. Don’t be so hard on yourself.'],
-	// 	// 	  // strings:'hello',
-	// 	// 	  speed: 50,
-	// 	// 	  autoStart: false
-	// 	// });
-	// });
-
-
 	document.body.onkeyup = function(e){
-    if(e.keyCode == 192){
-        song.play();
-    }
+		//~ / ` Key
+	    if(e.keyCode == 192){
+	        song.play();
+	    }
 
-      if(e.keyCode == 32){
-        	$("#intro").delay(100).fadeOut(600);
-	vista_sound.play();
-    }
+
+	    //Spacebar
+     	if(e.keyCode == 32){
+     		if ($("#intro").hasClass("visible")){
+     			 $("#intro").delay(100).fadeOut(600);
+	    		$("#intro").removeClass("visible");
+	    		vista_sound.play();
+     		}
+	    }
+
+
+
+	    //Enter
+     	if(e.keyCode == 13){
+     		if ($("#textarea").html()){
+
+     			//Begin style transfer
+     			styleTransferMode = true;
+     		}
+	    }
 	}
 
 	$("#fake-start-button").click(function(){
@@ -352,7 +346,7 @@ $(document).ready(function(){
 			$("#outro p").fadeIn(1000);
 			
 
-		 }, 4000);
+		 }, 7000);
 		
 		
 	});

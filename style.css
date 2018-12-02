@@ -9,6 +9,14 @@ font-family: "Lucida Console";
 src: url("lucida-console.ttf");
 
 }
+
+
+/*@font-face {
+font-family: "Harabara Bold";
+src: url("css/fonts/Harabara.eot");
+}
+
+*/
   canvas {
       border: solid 2px; width:800px; 
       display:inline;
@@ -21,12 +29,15 @@ src: url("lucida-console.ttf");
       display:inline;
      z-index:5;
      pointer-events:none;
+     display:none;
   }
   #fadingImage{
+    display:none;
     position:absolute; top:0px; left:0px;
      z-index:6;
   }
   #resultImage{
+
     display:none;
   }
 
@@ -141,24 +152,57 @@ position: absolute;
 }
 
 #cmd-window{
-  width:1000px;
+  width:800px;
   z-index:2;
 }
 
 #cmd-container{
-    width: 1000px;
+    width: 800px;
     display: inline-block;
-    height: 800px;
+    height: 780px;
     position: absolute;
-    left:600px;
+    left:720px;
     top:60px;
     z-index:2;
 
 }
 
 #styledImage, #fadingImage{
-  width:700px;
-  height:700px;
+  width:600px;
+  height:600px;
+  left:0;
+  right:0;
+  top:30px;
+  margin:auto;
+}
+
+#textarea{
+  font-family: "Lucida Console";
+   position: absolute;
+    top:90px;
+    height: 28px;
+    width: 600px;
+    /*padding: 5px;*/
+    left: 0px;
+    overflow: scroll;
+    right: 0px;
+    margin: auto;
+    font-size: 28px;
+    z-index: 10;
+    color: white;
+}
+
+#textarea.activated{
+   color:#FB4AFF;
+   top:auto;
+    bottom: 40px;
+    height: 28px;
+    width: 600px;
+  
+}
+
+#textarea.activated:focus{
+   outline:none;
 }
 
   .imageContainer{
