@@ -28,12 +28,18 @@ var nextStyleIndex;
 let prevCanvasState;
 
 
+var mouseDown = 0;
 
 
 
 
 
 var styles = [];
+
+let resizedContext;
+let resizedCanvas;
+
+
 
 
 
@@ -50,12 +56,20 @@ function preload() {
 function setup() {
 
 
-  var canvasP5 = createCanvas(120,120);
+  var canvasP5 = createCanvas(200,200);
   canvasP5.parent('paint-UI');
   background(255);
   canvas.style.width = "412px";
   canvas.style.height = "412px";
   prevCanvasState = JSON.stringify(canvas.toDataURL());
+
+//Placeholder canvas with smaller resolution
+  	resizedCanvas = document.createElement("canvas");
+	resizedContext = resizedCanvas.getContext("2d");
+	resizedCanvas.height = "80";
+	resizedCanvas.width = "80";
+
+
    // // Create two Style methods with different pre-trained models
 
    for (var i=0; i<stylePaths.length; i++){
@@ -67,7 +81,10 @@ function setup() {
 	resultImage = document.getElementById('resultImage');
 	styledImage = document.getElementById('styledImage');
 	fadingImage = document.getElementById('fadingImage');
-	var image = canvas.toDataURL('image/jpeg', .05);
+
+	resizedContext.drawImage(canvas, 0,0, 80, 80);
+	var image = resizedCanvas.toDataURL();
+	// var image = canvas.toDataURL();
 	resultImage.src = image;
 	penWeight = 1;
 	strokeColor = 0;
@@ -84,7 +101,7 @@ function mouseDragged()
 
 // A function to be called when the models have loaded
 
-var allStylesReady =false;
+var allStylesReady = false;
 
 function modelLoaded() {
   // Check if both models are loaded
@@ -93,46 +110,115 @@ function modelLoaded() {
 
 
   //Look through all the styles, check if they are all ready
-  var allStylesReady = true;
+  var numberReadyStyles = 0;
   for (var i=0;i<styles.length;i++){
-  	if (!styles[i].ready){
-  		allStylesReady = false;
+  	if (styles[i].ready){
+  		allStylesReady ++;
   	}
   }
-  if (allStylesReady){
-
-  
-
-	setInterval(function() {
-		var currentCanvasState = JSON.stringify(canvas.toDataURL());
-
-		if (currentCanvasState === prevCanvasState){
-
-		}else {
-			console.log("CANVAS HAS CHANGED");
-			prevCanvasState == currentCanvasState;
-			if ($("#paint-UI").hasClass("visible") && $("#image-preview-container").hasClass("visible") && !$("#textarea").is(":focus") && !$("#start-menu").hasClass("visible")){
-		 	//Check that textbox isnt active AND paint is open
-			currentStyle = styles[currentStyleIndex];
-			var image = canvas.toDataURL('image/jpeg', .05);
-			resultImage.src = image;
-			transferImages(currentStyle); 
-			}
-
-		}
-
-	},200);
-  	
-
+  if (numberReadyStyles = styles.length){
+  	allStylesReady = true;
   }
 
 }
 
 
+let updateHighDef;
+let updateIndex;
+setInterval(function() {
+		if (allStylesReady){
+
+
+			var currentCanvasState = JSON.stringify(canvas.toDataURL());
+			// console.log("TRIGGER INTERVAL");
+
+
+			if (currentCanvasState !== prevCanvasState){
+				console.log("CANVAS HAS CHANGED");
+				//We notice that the canvas has changed since the last interval
+				prevCanvasState = currentCanvasState;
+				if ($("#paint-UI").hasClass("visible") && $("#image-preview-container").hasClass("visible") && !$("#textarea").is(":focus") && !$("#start-menu").hasClass("visible")){
+			 		console.log("drawing state is on");
+			 		//Check that textbox isnt active AND paint is open
+					currentStyle = styles[currentStyleIndex];
+			 		//If we are currently drawing, use a lower resolution
+			 		if(mouseDown){
+			 			// console.log("mouseDown");
+						resizedCanvas.height = "90";
+						resizedCanvas.width = "90";
+						resizedContext.drawImage(canvas, 0,0, 90, 90);
+						var image = resizedCanvas.toDataURL();
+						// var image = canvas.toDataURL();
+						resultImage.src = image;
+						transferImages(currentStyle); 
+						updateHighDef = true;
+						updateIndex =0;
+					} else {
+						resizedCanvas.height = "150";
+						resizedCanvas.width = "150";
+						resizedContext.drawImage(canvas, 0,0,150, 150);
+						var image = resizedCanvas.toDataURL();
+						resultImage.src = image;
+						// transferImages(currentStyle); 
+						updateHighDef = true;
+						updateIndex =0;
+
+					}
+					// resultImage.src = image;
+					// transferImages(currentStyle); 
+				}
+
+			} else {
+
+				if (updateHighDef ==true){
+					var dimensions = ['90','110','120','130','150'];
+				    console.log("CANVAS HAS NOT CHANGED");
+					currentStyle = styles[currentStyleIndex];
+	
+						
+							
+						
+			
+					console.log("ITERATING THROUGH DIMENSION");
+					var thisDimension = dimensions[updateIndex];
+					var dimensionInt = parseInt(thisDimension);
+					resizedCanvas.height = thisDimension;
+					resizedCanvas.width = thisDimension;
+					resizedContext.drawImage(canvas, 0,0,dimensionInt,dimensionInt);
+					var image = resizedCanvas.toDataURL();
+					resultImage.src = image;
+					transferImages(currentStyle); 
+
+					if (updateIndex == (dimensions.length-1)){
+						updateHighDef = false;
+					}else{
+						updateIndex++;
+					}
+					 
+
+							
+
+						
+				}
+				
+
+
+		}
+
+		}
+		
+
+	},200);
+
 setInterval(function() {
 	//The thing switches to a new style. But we display then fade out the previous style
 	 if ($("#paint-UI").hasClass("visible") && $("#image-preview-container").hasClass("visible") && !$("#textarea").is(":focus") && !$("#start-menu").hasClass("visible")){
-	 	console.log("PAINT UI VISIBLE AND TEXTAREA IS NOT FOCUSED");
+					var image = resizedCanvas.toDataURL();
+		// var image = canvas.toDataURL();
+		resultImage.src = image;
+		transferImages(currentStyle); 
+		
+	 	// console.log("PAINT UI VISIBLE AND TEXTAREA IS NOT FOCUSED");
 		$(fadingImage).show();
 		currentStyleIndex = (currentStyleIndex+1) % stylePaths.length;
 		var currentStyleImgPath = pathsToOriginal[stylePaths[currentStyleIndex]];
@@ -147,6 +233,7 @@ setInterval(function() {
 function transferImages(style) {
 	style.transfer(document.getElementById("resultImage"), function(err, result) {
     	styledImage.src = result.src;
+    	// console.log("STYLE HAS TRANSFERED");
   });
 }
 
@@ -159,7 +246,7 @@ function transferImagesFading(style) {
 
 function erase(){
 	strokeColor = 255;
-	penWeight = 10;
+	penWeight = 30;
 	$("#paint-ui-img.erase").show();
 	$("#paint-ui-img.draw").hide();
 
@@ -269,6 +356,17 @@ $(document).ready(function(){
 		
 		
 	});
+
+
+
+//Detect if Mousedown (1 for mouseDown, 0 for mouseUp)
+
+document.body.onmousedown = function() { 
+  ++mouseDown;
+}
+document.body.onmouseup = function() {
+  --mouseDown;
+}
 
 
 	
