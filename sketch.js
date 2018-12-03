@@ -51,7 +51,7 @@ function preload() {
 	mousedown_1 = loadSound('sound/mousedown-1.mp3');
 	mousedown_2 = loadSound('sound/mousedown-2.mp3');
 	mouseup = loadSound('sound/mouseup-1.mp3');
-	song = loadSound('sound/audio_performance_mixdown.mp3');
+	song = loadSound('sound/narration_final.mp3');
 	vista_shutdown = loadSound('sound/vista-shutdown.mp3');
 }
 
