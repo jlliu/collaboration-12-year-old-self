@@ -9,11 +9,19 @@ let fadingImage;
 let penWeight;
 let strokeColor;
 
-var stylePaths = ['models/sakura','models/yue','models/spring','models/katara'];
+var stylePaths = ['models/sakura',
+// 'models/yue',
+'models/sasuke',
+'models/katara',
+'models/zuko',
+'models/spring'];
 
 var pathsToOriginal = {'models/sakura':'img/originals/sakura2.jpg',
-'models/yue':'img/originals/roses.jpg',
+'models/sasuke':'img/originals/sasuke.jpg',
+'models/zuko':'img/originals/zuko.jpg',
+// 'models/yue':'img/originals/roses.jpg',
 'models/spring':'img/originals/spring.jpg',
+
 'models/katara':'img/originals/katara.jpg',
 
 };
@@ -172,7 +180,7 @@ setInterval(function() {
 			} else {
 
 				if (updateHighDef ==true){
-					var dimensions = ['90','110','120','130','150'];
+					var dimensions = ['110','120','130','150'];
 					currentStyle = styles[currentStyleIndex];
 	
 			
