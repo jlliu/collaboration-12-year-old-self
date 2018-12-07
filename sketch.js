@@ -11,10 +11,13 @@ let strokeColor;
 
 var stylePaths = ['models/sakura',
 // 'models/yue',
-'models/sasuke',
-'models/katara',
+
+
 'models/zuko',
-'models/spring'];
+'models/spring',
+'models/sasuke',
+'models/katara'
+];
 
 var pathsToOriginal = {'models/sakura':'img/originals/sakura2.jpg',
 'models/sasuke':'img/originals/sasuke.jpg',
@@ -59,7 +62,7 @@ function preload() {
 	mousedown_1 = loadSound('sound/mousedown-1.mp3');
 	mousedown_2 = loadSound('sound/mousedown-2.mp3');
 	mouseup = loadSound('sound/mouseup-1.mp3');
-	song = loadSound('sound/narration_final2.mp3');
+	song = loadSound('sound/narration_final3.mp3');
 	vista_shutdown = loadSound('sound/vista-shutdown.mp3');
 }
 
@@ -357,7 +360,7 @@ $(document).ready(function(){
 		 }, 1000);
 
 				setTimeout(function(){ 
-			$("#outro p").fadeIn(1000);
+			$("#outro div").fadeIn(1000);
 			
 
 		 }, 7000);
