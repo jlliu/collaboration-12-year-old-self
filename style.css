@@ -288,9 +288,10 @@ img{
   #outro{
     display:none;
      z-index:100000;
+       font-family: "Lucida Console";
   }
 
-  #outro p{
+  #outro div{
     position:absolute;
     left: 0;
     right: 0;
