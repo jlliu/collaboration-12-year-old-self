@@ -59,7 +59,7 @@ function preload() {
 	mousedown_1 = loadSound('sound/mousedown-1.mp3');
 	mousedown_2 = loadSound('sound/mousedown-2.mp3');
 	mouseup = loadSound('sound/mouseup-1.mp3');
-	song = loadSound('sound/narration_final.mp3');
+	song = loadSound('sound/narration_final2.mp3');
 	vista_shutdown = loadSound('sound/vista-shutdown.mp3');
 }
 
@@ -233,7 +233,7 @@ setInterval(function() {
 		$(fadingImage).fadeOut(1000);
 		
 	}
-},60000);
+},40000);
 
 
 function transferImages(style) {
@@ -305,9 +305,15 @@ $(document).ready(function(){
 	document.body.onkeyup = function(e){
 		//~ / ` Key
 	    if(e.keyCode == 192){
-	        song.play();
-	    }
 
+  			if ( song.isPlaying() ) { // .isPlaying() returns a boolean
+				 song.pause();
+				    
+			  } else {
+			    song.play();
+			    
+			  }
+	    }
 
 	    //Spacebar
      	if(e.keyCode == 32){
